@@ -306,7 +306,7 @@ sw_peeps2 %>%
   head(1)
 ```
 
-> Greievous.  
+> Grievous.  
 
 
 
