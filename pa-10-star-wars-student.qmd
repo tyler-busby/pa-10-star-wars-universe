@@ -184,9 +184,9 @@ sw_ships %>%
   ggplot(aes(x = total_ships, 
              y = starships)) +
   #make points
-  geom_____(aes(color = trilogy)) +
+  geom_point(aes(color = trilogy)) +
   #fit a model
-  geom_____(method = "lm") +
+  geom_smooth(method = "lm") +
   #what does geom_text() do?
   geom_text(aes(label = title), 
             vjust = -1, 
@@ -196,7 +196,7 @@ sw_ships %>%
        subtitle = "The Number of Ships with Hyperdrive vs Total Ships") +
   theme_minimal() +
   #what aesthetic do we want to modify the color of points?
-  scale______viridis_d(end = 0.8) +
+  scale_color_viridis_d(end = 0.8) +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_blank(),
         legend.position = "bottom",
@@ -207,7 +207,7 @@ sw_ships %>%
 
 What do you notice about the use of hyperdrive type vehicles in the episodes?
 
-> Insert Answer
+ > They increase as the number of vehicles increases, and the sequels use the least vehicles with hyperdrive. 
 
 
 ## Part 2: The Physical Features of Star Wars Characters
@@ -224,10 +224,10 @@ We want to extract out `name`, `height`, and `mass` as `character` vectors (for 
 ```{r}
 sw_peeps <- sw_people %>%  {
   tibble(
-    name = ____(., "name"),  #character
-    height = ____(., "height"), #character
-    mass = ____(., "mass"), #character
-    films = map____(., "films") #list
+    name = map_chr(., "name"),  #character
+    height = map_chr(., "height"), #character
+    mass = map_chr(., "mass"), #character
+    films = map(., "films") #list
   )}
 sw_peeps
 ```
@@ -237,9 +237,9 @@ Notice that the `films` column contains lists of urls for each film reference. L
 ```{r}
 film_names <- sw_films %>% {
   tibble(
-    episode_id = ____(., "episode_id"), #double
-    episode_name = ____(., "title"), #character
-    url = ____(., "url") #character
+    episode_id = map_dbl(., "episode_id"), #double
+    episode_name = map_chr(., "title"), #character
+    url = map_chr(., "url") #character
   )}
 film_names
 ```
