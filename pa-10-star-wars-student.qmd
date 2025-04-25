@@ -257,18 +257,18 @@ Now we can finish cleaning up our data by doing the following:
 ```{r}
 sw_peeps2 <- sw_peeps %>% 
   #use a function from readr to extract the numbers and replace "unknown" with na
-  mutate(height = parse_____(height, na = "unknown"),
-         mass = parse_____(mass, na = "unknown")) %>%
+  mutate(height = parse_double(height, na = "unknown"),
+         mass = parse_double(mass, na = "unknown")) %>%
   #unnest the lists in films
-  ____(cols = c("films")) %>% 
+  unnest(cols = c("films")) %>% 
   #join the film data with episodes names to the people data
-  _____join(film_names, by = c("films" = "url")) %>% 
+  left_join(film_names, by = c("films" = "url")) %>% 
   #remove the `films` url from the data frame
-  ____(-films) %>% 
+  select(-films) %>% 
   #add the variable trilogy
-  ____(trilogy = case_when(episode_id %in% 1:3 ~ trilogies[1],
-                           episode_id %in% 4:6 ~ trilogies[2],
-                           episode_id %in% 7   ~ trilogies[3]))
+  mutate(trilogy = case_when(episode_id %in% 1:3 ~ trilogies[1],
+                             episode_id %in% 4:6 ~ trilogies[2],
+                             episode_id %in% 7   ~ trilogies[3]))
 sw_peeps2
 ```
 
@@ -280,9 +280,9 @@ We can now create a plot of height and mass by trilogy group to see if the physi
 sw_peeps2 %>% 
   filter(name != "Jabba Desilijic Tiure") %>% #major outlier removed
   #map the correct aesthetics
-  ggplot(aes(x = ____, 
-             y = ____, 
-             color = ____))+
+  ggplot(aes(x = height, 
+             y = mass, 
+             color = trilogy))+
   geom_point(position = "jitter") +
   geom_smooth(method = "lm", se = FALSE) +
   labs(x = "Height of Character (cm)",
@@ -299,10 +299,14 @@ sw_peeps2 %>%
 Write some code to identify who is is the heaviest (look at the graph to help guide this) Star Wars character (excluding Jabba Desilijic Tiure).
 
 ```{r}
-
+sw_peeps2 %>% 
+  filter(name != "Jabba Desilijic Tiure") %>% #major outlier removed
+  select(mass, name) %>%
+  arrange(desc(mass)) %>%
+  head(1)
 ```
 
->Insert Answer Here
+> Greievous.  
 
 
 
