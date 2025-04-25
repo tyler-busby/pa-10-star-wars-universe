@@ -60,7 +60,7 @@ Here is information about the fist 7 Star Wars films:
 
 ```{r}
 #| eval: false
-View(sw_films) 
+View(sw_films)  # view the films list
 ```
 
 We are going to explore the data contained in several lists similar to this one (and the previously explored `sw_people`), combining skills from all of our previous R code learning experiences.
@@ -68,19 +68,19 @@ We are going to explore the data contained in several lists similar to this one 
 How do the following two codes compare?
 
 ```{r}
-sw_films[[4]][["title"]]
-sw_films %>% pluck(4,"title")
+sw_films[[4]][["title"]] # print title of 4th movie
+sw_films %>% pluck(4,"title") # prints title of 4th movie with pipe
 ```
 
-> Insert Answer Here
+> The first line of code finds the title and prints it, but the second is using a function to select it.
 
 Suppose we want to pull out just the titles as a character vector, select the correct code (comment out the rest) to perform this action. You may want to run each line of code one at a time (remember `Ctrl + Enter` for Windows with your cursor on that line of code).
 
 ```{r}
 #comment out the incorrect codes
-sw_films %>% map("title")
-sw_films %>% map_chr("title")
-sw_films %>% map_dfc("title")
+#sw_films %>% map("title")
+#sw_films %>% map_chr("title")
+sw_films %>% map_dfc("title") #pulls titles as a character vector
 ```
 
 Suppose we want to apply a function to count the number of specific kinds of ships and vehicles in our data
@@ -88,19 +88,19 @@ Suppose we want to apply a function to count the number of specific kinds of shi
 Notice that for each film, the "starships" vector contains links to information on those starships (though note this data is out of date and should be linked at swapi.dev, not swapi.co).
 
 ```{r}
-sw_films[[1]][["starships"]]
+sw_films[[1]][["starships"]] #prints links to starship information
 ```
 
 So if we can count the number of webpage links that would tell us the number of starships that appear in that movie. Here are three different ways to count the number of urls under `starships`. Can you think of another? (it is ok if you can't). Compare and contrast how the three codes work differently to do the same thing.
 
 ```{r}
-sw_films %>% map(., "starships") %>% map_dbl(~length(.))
-map_dbl(sw_films, ~length(.x$starships))
-sw_films %>% map_dbl(., ~length(.x$starships))
+sw_films %>% map(., "starships") %>% map_dbl(~length(.)) #takes the film data, pipes it, finds starships per movie, and creates a double
+map(sw_films, "starships") %>% map_dbl(~length(.)) #finds the number of starships per movie and creates a double
+map_dbl(sw_films, ~length(.x$starships)) # creates a double of the number of starships
+sw_films %>% map_dbl(., ~length(.x$starships)) #takes the film data, pipes it, creates a double, finds starships per movie
 ```
 
-> Insert Answer
-
+> The 4 lines of code above have the same outputs, and the main difference between them is whether they use a pipe to refer to the data, or if the data is within the map function itself. The order of creating the list and filtering the data is also changed between the 4 code options.
 
 
 <!-- Swap roles -- Developer becomes Coder, Coder becomes Developer! -->
